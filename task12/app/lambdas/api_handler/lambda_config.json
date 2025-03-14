@@ -7,8 +7,7 @@
   "runtime": "nodejs20.x",
   "memory": 128,
   "timeout": 100,
-  "lambda_path": "lambdas/api_handler",
-  "alias": "learn",
+  "lambda_path": "lambdas\\api_handler",
   "dependencies": [
     {
       "resource_name": "${booking_userpool}",
@@ -17,12 +16,12 @@
   ],
   "event_sources": [],
   "env_variables": {
-    "CUPId": {
+    "cup_id": {
       "resource_name": "${booking_userpool}",
       "resource_type": "cognito_idp",
       "parameter": "id"
     },
-    "CUPClientId": {
+    "cup_client_id": {
       "resource_name": "${booking_userpool}",
       "resource_type": "cognito_idp",
       "parameter": "client_id"
@@ -30,7 +29,9 @@
     "tables_table": "${tables_table}",
     "reservations_table": "${reservations_table}"
   },
-  "publish_version": false,
+  "publish_version": true,
+  "alias": "${lambdas_alias_name}",
   "url_config": {},
-  "ephemeral_storage": 512
+  "ephemeral_storage": 512,
+  "tags": {}
 }

@@ -14,37 +14,19 @@
             "dynamodb:DeleteItem",
             "ssm:PutParameter",
             "ssm:GetParameter",
-            "kms:Decrypt"
-          ],
-          "Effect": "Allow",
-          "Resource": "*"
-        }
-      ],
-      "Version": "2012-10-17"
-    },
-    "resource_type": "iam_policy"
-  },
-  "lambda-custom-execution": {
-    "policy_content": {
-      "Statement": [
-        {
-          "Action": [
+            "kms:Decrypt",
+            "dynamodb:Scan",
             "cognito-idp:DescribeUserPool",
             "cognito-idp:GetUser",
             "cognito-idp:ListUsers",
             "cognito-idp:AdminCreateUser",
             "cognito-idp:AdminInitiateAuth",
+            "cognito-idp:AdminSetUserPassword",
             "cognito-idp:GetIdentityProviderByIdentifier",
             "cognito-idp:ListUserPools",
             "cognito-idp:ListUserPoolClients",
             "cognito-idp:AdminRespondToAuthChallenge",
-            "cognito-idp:AdminConfirmSignUp",
-            "dynamodb:GetItem",
-            "dynamodb:Query",
-            "dynamodb:PutItem",
-            "dynamodb:Batch*",
-            "dynamodb:DeleteItem",
-            "dynamodb:Scan"
+            "cognito-idp:AdminConfirmSignUp"
           ],
           "Effect": "Allow",
           "Resource": "*"
@@ -52,25 +34,8 @@
       ],
       "Version": "2012-10-17"
     },
-    "resource_type": "iam_policy"
-  },
-  "${tables_table}": {
-    "resource_type": "dynamodb_table",
-    "hash_key_name": "id",
-    "hash_key_type": "N",
-    "read_capacity": 1,
-    "write_capacity": 1,
-    "global_indexes": [],
-    "autoscaling": []
-  },
-  "${reservations_table}": {
-    "resource_type": "dynamodb_table",
-    "hash_key_name": "id",
-    "hash_key_type": "S",
-    "read_capacity": 1,
-    "write_capacity": 1,
-    "global_indexes": [],
-    "autoscaling": []
+    "resource_type": "iam_policy",
+    "tags": {}
   },
   "${booking_userpool}": {
     "resource_type": "cognito_idp",
@@ -84,6 +49,7 @@
     "auto_verified_attributes": [],
     "sms_configuration": {},
     "username_attributes": [],
+    "custom_attributes": [],
     "client": {
       "client_name": "client-app",
       "generate_secret": false,
@@ -91,10 +57,30 @@
         "ALLOW_ADMIN_USER_PASSWORD_AUTH",
         "ALLOW_CUSTOM_AUTH",
         "ALLOW_USER_SRP_AUTH",
-        "ALLOW_REFRESH_TOKEN_AUTH",
-        "ALLOW_USER_PASSWORD_AUTH"
+        "ALLOW_REFRESH_TOKEN_AUTH"
       ]
-    }
+    },
+    "tags": {}
+  },
+  "${tables_table}": {
+    "resource_type": "dynamodb_table",
+    "hash_key_name": "id",
+    "hash_key_type": "S",
+    "read_capacity": 1,
+    "write_capacity": 1,
+    "global_indexes": [],
+    "autoscaling": [],
+    "tags": {}
+  },
+  "${reservations_table}": {
+    "resource_type": "dynamodb_table",
+    "hash_key_name": "id",
+    "hash_key_type": "S",
+    "read_capacity": 1,
+    "write_capacity": 1,
+    "global_indexes": [],
+    "autoscaling": [],
+    "tags": {}
   },
   "api-ui-hoster": {
     "resource_type": "s3_bucket",
@@ -107,11 +93,17 @@
           "Sid": "WebSiteHostingGetObject",
           "Effect": "Allow",
           "Principal": "*",
-          "Action": ["s3:GetObject"],
-          "Resource": ["arn:aws:s3:::api-ui-hoster/*"],
+          "Action": [
+            "s3:GetObject"
+          ],
+          "Resource": [
+            "arn:aws:s3:::api-ui-hoster/*"
+          ],
           "Condition": {
             "IpAddress": {
-              "aws:SourceIp": ["18.197.177.98/32"]
+              "aws:SourceIp": [
+                "18.197.177.98/32"
+              ]
             }
           }
         }
